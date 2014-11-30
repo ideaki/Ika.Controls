@@ -15,7 +15,7 @@ using Windows.UI.Xaml.Navigation;
 
 // ユーザー コントロールのアイテム テンプレートについては、http://go.microsoft.com/fwlink/?LinkId=234236 を参照してください
 
-namespace Ika.Controls.View
+namespace Ika.Controls.Assets
 {
     public sealed partial class AutoScrollNavigationContent : UserControl
     {
