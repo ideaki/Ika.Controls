@@ -1,4 +1,5 @@
-﻿using Microsoft.Xaml.Interactivity;
+﻿using Ika.Controls.Assets;
+using Microsoft.Xaml.Interactivity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,7 +16,6 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
-using Ika.Controls.Assets;
 
 namespace Ika.Controls.Behaviors
 {
@@ -27,12 +27,12 @@ namespace Ika.Controls.Behaviors
         ScrollViewer _scrollViewer;
         DispatcherTimer _dt = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(16) };
         Point _pressedPoint;
-        Popup _autoScrollNavigationFlyout = new Popup()
+        Popup _middleClickFlyout = new Popup()
         {
             IsLightDismissEnabled = true,
             Width = 30,
             Height = 30,
-            Child = new AutoScrollNavigationContent()
+            Child = new MiddleClickFlyoutContent()
         };
 
         public bool IsAutoScrollEnabled
@@ -127,7 +127,7 @@ namespace Ika.Controls.Behaviors
             VerticalSpeed = 0;
             HorizontalSpeed = 0;
             Window.Current.CoreWindow.PointerMoved -= CoreWindow_PointerMoved;
-            _autoScrollNavigationFlyout.Closed -= _autoScrollNavigationFlyout_Closed;
+            _middleClickFlyout.Closed -= _autoScrollNavigationFlyout_Closed;
         }
 
         void itemscontrol_PointerPressed(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
@@ -135,14 +135,14 @@ namespace Ika.Controls.Behaviors
             if (!e.GetCurrentPoint(null).Properties.IsMiddleButtonPressed) return;
 
             _pressedPoint = e.GetCurrentPoint(null).Position;
-            Canvas.SetLeft(_autoScrollNavigationFlyout, _pressedPoint.X - 15);
-            Canvas.SetTop(_autoScrollNavigationFlyout, _pressedPoint.Y - 15);
+            Canvas.SetLeft(_middleClickFlyout, _pressedPoint.X - 15);
+            Canvas.SetTop(_middleClickFlyout, _pressedPoint.Y - 15);
             VerticalSpeed = 0;
             HorizontalSpeed = 0;
             IsAutoScrollEnabled = true;
-            _autoScrollNavigationFlyout.IsOpen = true;
+            _middleClickFlyout.IsOpen = true;
             _dt.Start();
-            _autoScrollNavigationFlyout.Closed += _autoScrollNavigationFlyout_Closed;
+            _middleClickFlyout.Closed += _autoScrollNavigationFlyout_Closed;
             Window.Current.CoreWindow.PointerMoved += CoreWindow_PointerMoved;
             e.Handled = true;
         }

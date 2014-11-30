@@ -13,7 +13,7 @@ using Windows.UI.Xaml.Input;
 
 namespace Ika.Controls.Behaviors
 {
-    public class ScrollViewerDragViewChangeBehavior : ScrollViewer, IBehavior
+    public class ScrollViewerDraggedScrollBehavior : DependencyObject, IBehavior
     {
         Point _pressedPoint;
         double _h;
@@ -71,7 +71,6 @@ namespace Ika.Controls.Behaviors
         {
             Window.Current.CoreWindow.PointerMoved -= CoreWindow_PointerMoved;
             Window.Current.CoreWindow.PointerReleased -= CoreWindow_PointerReleased;
-
         }
     }
 }
