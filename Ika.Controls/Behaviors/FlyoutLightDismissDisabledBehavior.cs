@@ -8,6 +8,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Media;
 
 namespace Ika.Controls.Behaviors
 {
@@ -42,10 +43,10 @@ namespace Ika.Controls.Behaviors
             this.AssociatedObject = associatedObject;
 
             Flyout flyout = (Flyout)this.AssociatedObject;
-            var fe = flyout.Content as FrameworkElement;
+            var fe = VisualTreeHelper.GetParent(flyout.Content) as FrameworkElement;
             flyout.Opening += flyout_Opening;
             flyout.Opened += flyout_Opened;
-            fe.Loaded += fe_Loaded;
+            //fe.Loaded += fe_Loaded;
 
         }
 
