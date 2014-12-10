@@ -50,6 +50,7 @@
     <Compile Include="Behaviors\ScrollViewerDoubleTappedZoomBehavior.cs" />
     <Compile Include="Behaviors\ScrollViewerDraggedScrollBehavior.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PullToRefreshPanel\PullToRefreshPanel.cs" />
     <Compile Include="Utils\VisualTreeUtils.cs" />
   </ItemGroup>
   <ItemGroup>
