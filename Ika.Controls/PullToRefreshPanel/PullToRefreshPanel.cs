@@ -5,45 +5,59 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 
 namespace Ika.Controls
 {
-    [TemplatePart(Name = "ScrollViewer", Type = typeof(ScrollViewer))]
+    //[TemplatePart(Name = "ScrollViewer", Type = typeof(ScrollViewer))]
+    //[TemplatePart(Name = "Grid", Type = typeof(Grid))]
+    //[TemplateVisualState(Name = "Normal", GroupName = "VisualStates")]
+    //[TemplateVisualState(Name = "Pull", GroupName = "VisualStates")]
+    //[TemplateVisualState(Name = "Refresh", GroupName = "VisualStates")]
     public class PullToRefreshPanel : ContentControl
     {
         bool isPullRefresh = false;
 
-        public DependencyObject RefreshMessage
+        public PullToRefreshPanel()
         {
-            get { return (DependencyObject)GetValue(RefreshMessageProperty); }
-            set { SetValue(RefreshMessageProperty, value); }
+            DefaultStyleKey = typeof(PullToRefreshPanel);
+            FontSize = 36;
         }
 
-        public static readonly DependencyProperty RefreshMessageProperty =
-            DependencyProperty.Register("RefreshMessage", typeof(DependencyObject), typeof(PullToRefreshPanel), null);
 
+        public object RefreshContent
+        {
+            get { return (object)GetValue(RefreshContentProperty); }
+            set { SetValue(RefreshContentProperty, value); }
+        }
 
+        public static readonly DependencyProperty RefreshContentProperty =
+            DependencyProperty.Register("RefreshContent",
+                                        typeof(object),
+                                        typeof(PullToRefreshPanel),
+                                        new PropertyMetadata("離して更新"));
 
-        //public FrameworkElement Content
-        //{
-        //    get { return (FrameworkElement)GetValue(ContentProperty); }
-        //    set { SetValue(ContentProperty, value); }
-        //}
+        public object PullContent
+        {
+            get { return (object)GetValue(PullContentProperty); }
+            set { SetValue(PullContentProperty, value); }
+        }
 
-
-        //public static readonly DependencyProperty ContentProperty =
-        //    DependencyProperty.Register("Content", typeof(FrameworkElement), typeof(PullToRefreshPanel), null);
-
-        //public ScrollViewer ScrollViewer
-        //{
-        //    get { return (ScrollViewer)GetValue(ScrollViewerProperty); }
-        //    private set { SetValue(ScrollViewerProperty, value); }
-        //}
-
-        //private static readonly DependencyProperty ScrollViewerProperty =
-        //    DependencyProperty.Register("ScrollViewer", typeof(ScrollViewer), typeof(PullToRefreshPanel), null);
+        public static readonly DependencyProperty PullContentProperty =
+            DependencyProperty.Register("PullContent",
+                                        typeof(object),
+                                        typeof(PullToRefreshPanel),
+                                        new PropertyMetadata("引っ張って"));
 
         public event EventHandler PullToRefresh;
+
+        void UpdateStates(bool useTransitions)
+        {
+            if (ScrollViewer.VerticalOffset == 0.0)
+                VisualStateManager.GoToState(this, "Refresh", useTransitions);
+            else
+                VisualStateManager.GoToState(this, "Pull", useTransitions);
+        }
 
         protected virtual void OnPullToRefresh(EventArgs e)
         {
@@ -51,53 +65,50 @@ namespace Ika.Controls
                 PullToRefresh(this, e);
         }
 
-        public PullToRefreshPanel()
-        {
-            DefaultStyleKey = typeof(PullToRefreshPanel);
-        }
-
         protected override void OnApplyTemplate()
         {
-            var sc = GetTemplateChild("ScrollViewer") as ScrollViewer;
-            sc.SizeChanged += ScrollViewer_SizeChanged;
-            sc.ViewChanged += ScrollViewer_ViewChanged;
+            ScrollViewer = GetTemplateChild("ScrollViewer") as ScrollViewer;
+            ScrollViewer.SizeChanged += ScrollViewer_SizeChanged;
+            ScrollViewer.ViewChanged += ScrollViewer_ViewChanged;
+            UpdateStates(false);
             base.OnApplyTemplate();
         }
 
         void ScrollViewer_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            var sv = sender as ScrollViewer;
-            sv.ChangeView(null, (double)RefreshMessage.GetValue(HeightProperty), null);
+            var grid = GetTemplateChild("Grid") as Grid;
+            ScrollViewer.ChangeView(null, grid.ActualHeight, null);
             var content = Content as FrameworkElement;
             if (content == null) return;
-            content.SetValue(HeightProperty, sv.ActualHeight);
-            content.SetValue(WidthProperty, sv.ActualWidth);
+            content.SetValue(HeightProperty, ScrollViewer.ActualHeight);
+            content.SetValue(WidthProperty, ScrollViewer.ActualWidth);
         }
 
         async void ScrollViewer_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
         {
-            var sv = sender as ScrollViewer;
-
-
-            if (sv.VerticalOffset == 0.0)
-                VisualStateManager.GoToState(this, "Refresh", true);
-            else
-                VisualStateManager.GoToState(this, "Pull", true);
-
-            if (sv.VerticalOffset != 0.0)
+            UpdateStates(true);
+            if (ScrollViewer.VerticalOffset != 0.0)
                 isPullRefresh = true;
 
+            var grid = GetTemplateChild("Grid") as Grid;
             if (!e.IsIntermediate)
             {
-                if (sv.VerticalOffset == 0.0 && isPullRefresh)
+                if (ScrollViewer.VerticalOffset == 0.0 && isPullRefresh)
                 {
                     OnPullToRefresh(new EventArgs());
 
-                    await Task.Delay(300);
+                    await Task.Delay(100);
                 }
                 isPullRefresh = false;
-                sv.ChangeView(null, (double)RefreshMessage.GetValue(HeightProperty), null);
+                ScrollViewer.ChangeView(null, grid.ActualHeight, null);
             }
+        }
+
+        ScrollViewer scrollviewer;
+        ScrollViewer ScrollViewer
+        {
+            get { return scrollviewer; }
+            set { scrollviewer = value; }
         }
     }
 }

@@ -1,25 +1,10 @@
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="using:Ika.Controls">
+                    xmlns:local="using:Ika.Controls.Themes">
 
+    <ResourceDictionary.MergedDictionaries>
+        <!--  <ResourceDictionary Source="/Ika.Contorls;componet/Themes/Generic.PullToRefreshPanel.xaml"/>  -->
+        <ResourceDictionary Source="Themes/Generic.PullToRefreshPanel.xaml" />
+    </ResourceDictionary.MergedDictionaries>
 
-    <Style TargetType="local:PullToRefreshPanel">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="local:PullToRefreshPanel">
-                    <Border Background="{TemplateBinding Background}">
-                        <ScrollViewer x:Name="ScrollViewer"
-                                      HorizontalScrollMode="Disabled"
-                                      VerticalScrollBarVisibility="Hidden"
-                                      ZoomMode="Disabled">
-                            <StackPanel x:Name="StackPanel">
-                                <ContentControl Content="{TemplateBinding RefreshMessage}" />
-                                <ContentControl Content="{TemplateBinding Content}" />
-                            </StackPanel>
-                        </ScrollViewer>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
 </ResourceDictionary>
