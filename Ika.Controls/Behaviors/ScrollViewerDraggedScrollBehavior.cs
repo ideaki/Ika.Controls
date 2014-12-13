@@ -64,7 +64,7 @@ namespace Ika.Controls.Behaviors
 
             var scrollviewer = (ScrollViewer)this.AssociatedObject;
 
-            scrollviewer.ChangeView(moveX, moveY, null);
+            scrollviewer.ChangeView(moveX, moveY, null, true);
         }
 
         void CoreWindow_PointerReleased(CoreWindow sender, PointerEventArgs args)
