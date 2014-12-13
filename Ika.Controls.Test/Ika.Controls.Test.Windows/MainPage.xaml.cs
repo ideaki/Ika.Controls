@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ika.Controls.Test.Common;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -26,5 +27,29 @@ namespace Ika.Controls.Test
         {
             this.InitializeComponent();
         }
+    }
+
+    public class AutoScroll : BindableBase
+    {
+        bool _isScroll = false;
+        double _vspeed = 1;
+        double _hspeed = 1;
+
+        public double VerticalSpeed
+        {
+            get { return _vspeed; }
+            set { SetProperty(ref _vspeed, value); }
+        }
+        public double HorizontalSpeed
+        {
+            get { return _hspeed; }
+            set { SetProperty(ref _hspeed, value); }
+        }
+        public bool IsScroll
+        {
+            get { return _isScroll; }
+            set { SetProperty(ref _isScroll, value); }
+        }
+        public string Text { get; set; }
     }
 }

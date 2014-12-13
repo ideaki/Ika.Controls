@@ -37,17 +37,17 @@
                                 <Grid Name="Grid"
                                       Width="{Binding Width,
                                                       ElementName=ScrollViewer}"
-                                      Height="100">
+                                      Height="{TemplateBinding PullRange}">
                                     <ContentControl x:Name="RefreshContent"
                                                     HorizontalAlignment="Center"
-                                                    VerticalAlignment="Center"
+                                                    VerticalAlignment="Bottom"
                                                     Content="{TemplateBinding RefreshContent}" />
                                     <ContentControl x:Name="PullContent"
                                                     HorizontalAlignment="Center"
-                                                    VerticalAlignment="Center"
+                                                    VerticalAlignment="Bottom"
                                                     Content="{TemplateBinding PullContent}" />
                                 </Grid>
-                                <ContentPresenter Content="{TemplateBinding Content}" />
+                                <ContentPresenter />
                             </StackPanel>
                         </ScrollViewer>
                     </Border>

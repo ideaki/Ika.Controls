@@ -9,6 +9,12 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       mc:Ignorable="d">
 
+    <Page.DataContext>
+        <local:AutoScroll HorizontalSpeed="10"
+                          IsScroll="True"
+                          VerticalSpeed="1" />
+    </Page.DataContext>
+
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="140" />
@@ -16,19 +22,43 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="300" />
-            <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="300" />
+            <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
 
+        <ToggleSwitch Margin="22,4,0,0"
+                      HorizontalAlignment="Left"
+                      VerticalAlignment="Top"
+                      Header="Auto Scroll"
+                      IsOn="{Binding IsScroll,
+                                     Mode=TwoWay}" />
+        <Slider Width="248"
+                Margin="28,100,0,10"
+                HorizontalAlignment="Left"
+                Maximum="50"
+                Minimum="-50"
+                Value="{Binding VerticalSpeed,
+                                Mode=TwoWay}" />
         <ika:PullToRefreshPanel Grid.Row="1">
             <local:MyListView>
                 <Interactivity:Interaction.Behaviors>
-                    <Behaviors:AutoScrollBehavior />
+                    <Behaviors:AutoScrollBehavior IsAutoScrollEnabled="{Binding IsScroll, Mode=TwoWay}" VerticalSpeed="{Binding VerticalSpeed, Mode=TwoWay}" />
                 </Interactivity:Interaction.Behaviors>
             </local:MyListView>
         </ika:PullToRefreshPanel>
+        <ScrollViewer Grid.Row="1"
+                      Grid.Column="1"
+                      Height="300"
+                      BorderBrush="White"
+                      BorderThickness="1">
+            <Interactivity:Interaction.Behaviors>
+                <Behaviors:ScrollViewerDoubleTappedZoomBehavior />
+                <Behaviors:ScrollViewerDraggedScrollBehavior />
+            </Interactivity:Interaction.Behaviors>
+            <Image Source="Assets/イカ娘のAA_16_L.png" Stretch="None" />
+        </ScrollViewer>
         <Canvas Grid.Row="1"
-                Grid.Column="1"
+                Grid.Column="2"
                 Background="DarkGreen">
             <Image Canvas.Left="125"
                    Canvas.Top="187"
@@ -48,17 +78,7 @@
                     <Behaviors:ControlMoveBehavior />
                 </Interactivity:Interaction.Behaviors>
             </Image>
+            <TextBlock Canvas.Left="10" TextWrapping="Wrap" Text="&lt;Canvas&gt;" Canvas.Top="10" FontSize="36"/>
         </Canvas>
-        <ScrollViewer Grid.Column="2"
-                      Grid.Row="1"
-                      Height="300"
-                      BorderBrush="White"
-                      BorderThickness="1">
-            <Interactivity:Interaction.Behaviors>
-                <Behaviors:ScrollViewerDoubleTappedZoomBehavior />
-                <Behaviors:ScrollViewerDraggedScrollBehavior />
-            </Interactivity:Interaction.Behaviors>
-            <Image Source="Assets/イカ娘のAA_16_L.png" Stretch="None" />
-        </ScrollViewer>
     </Grid>
 </Page>
