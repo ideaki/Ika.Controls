@@ -1,4 +1,4 @@
-﻿using Ika.Controls.Assets;
+﻿using Ika.Controls.Views;
 using Microsoft.Xaml.Interactivity;
 using System;
 using System.Collections.Generic;

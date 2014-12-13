@@ -10,7 +10,7 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Shapes;
 
-namespace Ika.Controls.Assets
+namespace Ika.Controls.Views
 {
     public sealed partial class MiddleClickFlyoutContent : UserControl
     {

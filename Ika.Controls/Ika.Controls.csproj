@@ -44,7 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Behaviors\AutoScrollBehavior.cs" />
-    <Compile Include="Assets\MiddleClickFlyoutContent.cs" />
+    <Compile Include="Views\MiddleClickFlyoutContent.cs" />
     <Compile Include="Behaviors\ControlMoveBehavior.cs" />
     <Compile Include="Behaviors\FlyoutLightDismissDisabledBehavior.cs" />
     <Compile Include="Behaviors\ScrollViewerDoubleTappedZoomBehavior.cs" />
