@@ -11,7 +11,7 @@
 
     <Page.DataContext>
         <local:AutoScroll HorizontalSpeed="10"
-                          IsScroll="True"
+                          IsScroll="False"
                           VerticalSpeed="1" />
     </Page.DataContext>
 
@@ -60,6 +60,11 @@
         <Canvas Grid.Row="1"
                 Grid.Column="2"
                 Background="DarkGreen">
+            <TextBlock Canvas.Left="10"
+                       Canvas.Top="10"
+                       FontSize="36"
+                       Text="&lt;Canvas&gt;"
+                       TextWrapping="Wrap" />
             <Image Canvas.Left="125"
                    Canvas.Top="187"
                    Width="234"
@@ -78,7 +83,6 @@
                     <Behaviors:ControlMoveBehavior />
                 </Interactivity:Interaction.Behaviors>
             </Image>
-            <TextBlock Canvas.Left="10" TextWrapping="Wrap" Text="&lt;Canvas&gt;" Canvas.Top="10" FontSize="36"/>
         </Canvas>
     </Grid>
 </Page>

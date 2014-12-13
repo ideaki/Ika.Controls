@@ -3,7 +3,6 @@
                     xmlns:local="using:Ika.Controls.Themes">
 
     <ResourceDictionary.MergedDictionaries>
-        <!--  <ResourceDictionary Source="/Ika.Contorls;componet/Themes/Generic.PullToRefreshPanel.xaml"/>  -->
         <ResourceDictionary Source="Themes/Generic.PullToRefreshPanel.xaml" />
     </ResourceDictionary.MergedDictionaries>
 

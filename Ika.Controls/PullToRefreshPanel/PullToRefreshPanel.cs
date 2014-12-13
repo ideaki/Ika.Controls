@@ -9,21 +9,17 @@ using Windows.UI.Xaml.Media;
 
 namespace Ika.Controls
 {
-    //[TemplatePart(Name = "ScrollViewer", Type = typeof(ScrollViewer))]
-    //[TemplatePart(Name = "Grid", Type = typeof(Grid))]
-    //[TemplateVisualState(Name = "Normal", GroupName = "VisualStates")]
-    //[TemplateVisualState(Name = "Pull", GroupName = "VisualStates")]
-    //[TemplateVisualState(Name = "Refresh", GroupName = "VisualStates")]
     public class PullToRefreshPanel : ContentControl
     {
         bool isPullRefresh = false;
+
+        public event EventHandler PullToRefresh;
 
         public PullToRefreshPanel()
         {
             DefaultStyleKey = typeof(PullToRefreshPanel);
             FontSize = 28;
         }
-
 
         public object RefreshContent
         {
@@ -49,8 +45,6 @@ namespace Ika.Controls
                                         typeof(PullToRefreshPanel),
                                         new PropertyMetadata("引っ張って"));
 
-
-
         public double PullRange
         {
             get { return (double)GetValue(PullRangeProperty); }
@@ -63,16 +57,20 @@ namespace Ika.Controls
                                         typeof(PullToRefreshPanel),
                                         new PropertyMetadata(200.0));
 
-
-
-        public event EventHandler PullToRefresh;
-
         void UpdateStates(bool useTransitions)
         {
             if (ScrollViewer.VerticalOffset == 0.0)
                 VisualStateManager.GoToState(this, "Refresh", useTransitions);
             else
                 VisualStateManager.GoToState(this, "Pull", useTransitions);
+        }
+
+        void UpdateTransform()
+        {
+            var element = GetTemplateChild("StackPanel") as UIElement;
+            var transform = element.RenderTransform as CompositeTransform ?? new CompositeTransform();
+            transform.TranslateY = (ScrollViewer.VerticalOffset - PullRange) * 0.8;
+            element.RenderTransform = transform;
         }
 
         protected virtual void OnPullToRefresh(EventArgs e)
@@ -91,33 +89,20 @@ namespace Ika.Controls
 
         void ScrollViewer_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            var grid = GetTemplateChild("Grid") as Grid;
+            var grid = GetTemplateChild("PullGrid") as Grid;
             ScrollViewer.ChangeView(null, grid.ActualHeight, null);
-            var content = Content as FrameworkElement;
-            if (content == null) return;
-            content.SetValue(HeightProperty, ScrollViewer.ActualHeight);
-            content.SetValue(WidthProperty, ScrollViewer.ActualWidth);
+            var contentgrid = GetTemplateChild("ContentGrid") as Grid;
+            contentgrid.SetValue(HeightProperty, ScrollViewer.ActualHeight);
+            contentgrid.SetValue(WidthProperty, ScrollViewer.ActualWidth);
         }
 
         void ScrollViewer_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
         {
-
             UpdateStates(true);
+            UpdateTransform();
 
             if (ScrollViewer.VerticalOffset != 0.0)
                 isPullRefresh = true;
-
-
-            var Element = GetTemplateChild("StackPanel") as UIElement;
-            var Transform = Element.RenderTransform as CompositeTransform;
-            if (Transform == null)
-                Transform = new CompositeTransform();
-
-            Transform.TranslateY = (ScrollViewer.VerticalOffset - PullRange) * 0.8;
-
-            Element.RenderTransform = Transform;
-
-            var grid = GetTemplateChild("Grid") as Grid;
 
             if (!e.IsIntermediate)
             {
@@ -128,6 +113,7 @@ namespace Ika.Controls
                     //await Task.Delay(50);
                 }
                 isPullRefresh = false;
+                var grid = GetTemplateChild("PullGrid") as Grid;
                 ScrollViewer.ChangeView(null, grid.ActualHeight, null);
             }
         }
