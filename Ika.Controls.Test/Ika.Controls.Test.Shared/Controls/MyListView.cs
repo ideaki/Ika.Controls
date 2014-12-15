@@ -17,7 +17,7 @@ namespace Ika.Controls.Test
     {
         protected override void OnApplyTemplate()
         {
-            ItemsSource = Enumerable.Range(1, 500);
+            ItemsSource = Enumerable.Range(1, 30);
             base.OnApplyTemplate();
         }
 
@@ -28,7 +28,7 @@ namespace Ika.Controls.Test
         /// <param name="item"></param>
         protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
         {
-            int index = IndexFromContainer(element);
+            int index = IndexFromContainer(element) * 10;
             //if (index % 2 == 0)
             //{
             //    element.SetValue(BackgroundProperty, new SolidColorBrush(Color.FromArgb((byte)0, (byte)(index/256/256),(byte)(index/256),(byte)index)));

@@ -25,7 +25,6 @@
             <ColumnDefinition Width="300" />
             <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
-
         <ToggleSwitch Margin="22,4,0,0"
                       HorizontalAlignment="Left"
                       VerticalAlignment="Top"
@@ -39,10 +38,10 @@
                 Minimum="-50"
                 Value="{Binding VerticalSpeed,
                                 Mode=TwoWay}" />
-        <ika:PullToRefreshPanel Grid.Row="1">
-            <local:MyListView>
+        <ika:PullToRefreshPanel Grid.Row="1" PullToRefresh="PullToRefreshPanel_PullToRefresh">
+            <local:MyListView ScrollViewer.VerticalScrollBarVisibility="Auto">
                 <Interactivity:Interaction.Behaviors>
-                    <Behaviors:AutoScrollBehavior IsAutoScrollEnabled="{Binding IsScroll, Mode=TwoWay}" VerticalSpeed="{Binding VerticalSpeed, Mode=TwoWay}" />
+                    <Behaviors:AutoScrollBehavior />
                 </Interactivity:Interaction.Behaviors>
             </local:MyListView>
         </ika:PullToRefreshPanel>
@@ -52,8 +51,8 @@
                       BorderBrush="White"
                       BorderThickness="1">
             <Interactivity:Interaction.Behaviors>
-                <Behaviors:ScrollViewerDoubleTappedZoomBehavior />
-                <Behaviors:ScrollViewerDraggedScrollBehavior />
+                <Behaviors:ScrollViewerDoubleTappedZoomBehavior x:Name="svdoubletappedbehavior" />
+                <Behaviors:ScrollViewerDraggedScrollBehavior/>
             </Interactivity:Interaction.Behaviors>
             <Image Source="Assets/イカ娘のAA_16_L.png" Stretch="None" />
         </ScrollViewer>

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -26,6 +27,12 @@ namespace Ika.Controls.Test
         public MainPage()
         {
             this.InitializeComponent();
+        }
+
+        private async void PullToRefreshPanel_PullToRefresh(object sender, EventArgs e)
+        {
+            await Task.Delay(50);
+            this.svdoubletappedbehavior.ImageZoom();
         }
     }
 
