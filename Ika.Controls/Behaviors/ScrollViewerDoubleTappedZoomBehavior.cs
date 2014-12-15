@@ -49,7 +49,12 @@ namespace Ika.Controls.Behaviors
             ImageZoom(point, (ScrollViewer)sender, img);
         }
 
-        async void ImageZoom(Point point, ScrollViewer sv, Image img, ZoomType zoomtype = ZoomType.DotByDot)
+        public void ImageZoom()
+        {
+            ImageZoom(new Point(), (ScrollViewer)AssociatedObject, VisualTreeUtils.FindFirstElementInVisualTree<Image>(AssociatedObject as DependencyObject));
+        }
+
+        public async void ImageZoom(Point point, ScrollViewer sv, Image img, ZoomType zoomtype = ZoomType.DotByDot)
         {
             var bmp = img.Source as BitmapSource;
             if (bmp == null) return;
@@ -89,7 +94,7 @@ namespace Ika.Controls.Behaviors
             sv.IsEnabled = true;
         }
 
-        enum ZoomType
+        public enum ZoomType
         {
             UniformToFill,
             DotByDot, // ドットバイドット<=>デフォルト
