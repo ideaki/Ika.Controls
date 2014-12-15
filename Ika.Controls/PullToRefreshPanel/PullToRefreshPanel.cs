@@ -18,7 +18,6 @@ namespace Ika.Controls
         public PullToRefreshPanel()
         {
             DefaultStyleKey = typeof(PullToRefreshPanel);
-            FontSize = 28;
         }
 
         public object RefreshContent
@@ -57,6 +56,16 @@ namespace Ika.Controls
                                         typeof(PullToRefreshPanel),
                                         new PropertyMetadata(200.0));
 
+        void UpdateLView()
+        {
+            var grid = GetTemplateChild("PullGrid") as Grid;
+            ScrollViewer.ChangeView(null, grid.ActualHeight, null);
+            var contentgrid = GetTemplateChild("ContentGrid") as Grid;
+            contentgrid.SetValue(HeightProperty, ScrollViewer.ActualHeight);
+            contentgrid.SetValue(WidthProperty, ScrollViewer.ActualWidth);
+            UpdateTransform();
+        }
+
         void UpdateStates(bool useTransitions)
         {
             if (ScrollViewer.VerticalOffset == 0.0)
@@ -82,18 +91,10 @@ namespace Ika.Controls
         protected override void OnApplyTemplate()
         {
             ScrollViewer = GetTemplateChild("ScrollViewer") as ScrollViewer;
-            ScrollViewer.SizeChanged += ScrollViewer_SizeChanged;
+            ScrollViewer.SizeChanged += (s, e) => UpdateLView();
             ScrollViewer.ViewChanged += ScrollViewer_ViewChanged;
+            this.Loaded += (s, e) => UpdateLView();
             base.OnApplyTemplate();
-        }
-
-        void ScrollViewer_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            var grid = GetTemplateChild("PullGrid") as Grid;
-            ScrollViewer.ChangeView(null, grid.ActualHeight, null);
-            var contentgrid = GetTemplateChild("ContentGrid") as Grid;
-            contentgrid.SetValue(HeightProperty, ScrollViewer.ActualHeight);
-            contentgrid.SetValue(WidthProperty, ScrollViewer.ActualWidth);
         }
 
         void ScrollViewer_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
