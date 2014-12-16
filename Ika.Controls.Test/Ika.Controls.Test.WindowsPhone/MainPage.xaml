@@ -5,10 +5,23 @@
     xmlns:local="using:Ika.Controls.Test"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:Ika.Controls"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:behaviors="using:Ika.Controls.Behaviors"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-
+        <Pivot>
+            <PivotItem Header="引っ張って更新">
+                <controls:PullToRefreshPanel Grid.Column="0" Grid.Row="1" PullToRefresh="PullToRefreshPanel_PullToRefresh">
+                    <local:MyListView x:Name="TestListView"  ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <interactivity:Interaction.Behaviors>
+                            <behaviors:AutoScrollBehavior />
+                        </interactivity:Interaction.Behaviors>
+                    </local:MyListView>
+                </controls:PullToRefreshPanel>
+            </PivotItem>
+        </Pivot>
     </Grid>
 </Page>
