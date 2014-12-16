@@ -3,11 +3,11 @@
                     xmlns:controls="using:Ika.Controls">
 
 
-    <Style TargetType="local:PullToRefreshPanel">
+    <Style TargetType="controls:PullToRefreshPanel">
         <Setter Property="FontSize" Value="24" />
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="local:PullToRefreshPanel">
+                <ControlTemplate TargetType="controls:PullToRefreshPanel">
                     <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}">
 
                         <VisualStateManager.VisualStateGroups>
