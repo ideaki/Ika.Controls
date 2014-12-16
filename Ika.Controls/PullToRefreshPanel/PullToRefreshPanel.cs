@@ -11,7 +11,7 @@ namespace Ika.Controls
 {
     public class PullToRefreshPanel : ContentControl
     {
-        bool isPullRefresh = false;
+        bool _isPullRefresh;
 
         public event EventHandler PullToRefresh;
 
@@ -22,7 +22,7 @@ namespace Ika.Controls
 
         public object RefreshContent
         {
-            get { return (object)GetValue(RefreshContentProperty); }
+            get { return GetValue(RefreshContentProperty); }
             set { SetValue(RefreshContentProperty, value); }
         }
 
@@ -34,7 +34,7 @@ namespace Ika.Controls
 
         public object PullContent
         {
-            get { return (object)GetValue(PullContentProperty); }
+            get { return GetValue(PullContentProperty); }
             set { SetValue(PullContentProperty, value); }
         }
 
@@ -58,9 +58,9 @@ namespace Ika.Controls
 
         void UpdateLView()
         {
-            var grid = GetTemplateChild("PullGrid") as Grid;
+            var grid = (Grid)GetTemplateChild("PullGrid");
             ScrollViewer.ChangeView(null, grid.ActualHeight, null);
-            var contentgrid = GetTemplateChild("ContentGrid") as Grid;
+            var contentgrid = (Grid)GetTemplateChild("ContentGrid");
             contentgrid.SetValue(HeightProperty, ScrollViewer.ActualHeight);
             contentgrid.SetValue(WidthProperty, ScrollViewer.ActualWidth);
             UpdateTransform();
@@ -68,15 +68,12 @@ namespace Ika.Controls
 
         void UpdateStates(bool useTransitions)
         {
-            if (ScrollViewer.VerticalOffset == 0.0)
-                VisualStateManager.GoToState(this, "Refresh", useTransitions);
-            else
-                VisualStateManager.GoToState(this, "Pull", useTransitions);
+            VisualStateManager.GoToState(this, Math.Abs(ScrollViewer.VerticalOffset) < 0.0 ? "Refresh" : "Pull", useTransitions);
         }
 
         void UpdateTransform()
         {
-            var element = GetTemplateChild("StackPanel") as UIElement;
+            var element = (UIElement)GetTemplateChild("StackPanel");
             var transform = element.RenderTransform as CompositeTransform ?? new CompositeTransform();
             transform.TranslateY = (ScrollViewer.VerticalOffset - PullRange) * 0.8;
             element.RenderTransform = transform;
@@ -84,16 +81,15 @@ namespace Ika.Controls
 
         protected virtual void OnPullToRefresh(EventArgs e)
         {
-            if (PullToRefresh != null)
-                PullToRefresh(this, e);
+            PullToRefresh?.Invoke(this, e);
         }
 
         protected override void OnApplyTemplate()
         {
-            ScrollViewer = GetTemplateChild("ScrollViewer") as ScrollViewer;
+            ScrollViewer = (ScrollViewer)GetTemplateChild("ScrollViewer");
             ScrollViewer.SizeChanged += (s, e) => UpdateLView();
             ScrollViewer.ViewChanged += ScrollViewer_ViewChanged;
-            this.Loaded += (s, e) => UpdateLView();
+            Loaded += (s, e) => UpdateLView();
             base.OnApplyTemplate();
         }
 
@@ -102,28 +98,20 @@ namespace Ika.Controls
             UpdateStates(true);
             UpdateTransform();
 
-            if (ScrollViewer.VerticalOffset != 0.0)
-                isPullRefresh = true;
+            if (Math.Abs(ScrollViewer.VerticalOffset) > 0.0)
+                _isPullRefresh = true;
 
-            if (!e.IsIntermediate)
+            if (e.IsIntermediate)
+                return;
+            if (Math.Abs(ScrollViewer.VerticalOffset) < 0.0 && _isPullRefresh)
             {
-                if (ScrollViewer.VerticalOffset == 0.0 && isPullRefresh)
-                {
-                    OnPullToRefresh(new EventArgs());
-
-                    //await Task.Delay(50);
-                }
-                isPullRefresh = false;
-                var grid = GetTemplateChild("PullGrid") as Grid;
-                ScrollViewer.ChangeView(null, grid.ActualHeight, null);
+                OnPullToRefresh(new EventArgs());
             }
+            _isPullRefresh = false;
+            var grid = (Grid)GetTemplateChild("PullGrid");
+            ScrollViewer.ChangeView(null, grid.ActualHeight, null);
         }
 
-        ScrollViewer scrollviewer;
-        ScrollViewer ScrollViewer
-        {
-            get { return scrollviewer; }
-            set { scrollviewer = value; }
-        }
+        private ScrollViewer ScrollViewer { get; set; }
     }
 }
