@@ -81,7 +81,7 @@ namespace Ika.Controls
 
         protected virtual void OnPullToRefresh(EventArgs e)
         {
-            PullToRefresh?.Invoke(this, e);
+            if (PullToRefresh != null) PullToRefresh(this, e);
         }
 
         protected override void OnApplyTemplate()
