@@ -70,7 +70,7 @@ namespace Ika.Controls.Test
 
             var toastNode = toastXml.SelectSingleNode("/toast");
             var xmlElement = (XmlElement)toastNode;
-            xmlElement?.SetAttribute("duration", "long");
+            if (xmlElement != null) xmlElement.SetAttribute("duration", "long");
 
             var toast = new ToastNotification(toastXml)
             {
