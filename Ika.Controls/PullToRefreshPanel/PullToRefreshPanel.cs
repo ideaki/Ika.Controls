@@ -68,7 +68,7 @@ namespace Ika.Controls
 
         void UpdateStates(bool useTransitions)
         {
-            VisualStateManager.GoToState(this, Math.Abs(ScrollViewer.VerticalOffset) < 0.0 ? "Refresh" : "Pull", useTransitions);
+            VisualStateManager.GoToState(this, ScrollViewer.VerticalOffset == 0.0 ? "Refresh" : "Pull", useTransitions);
         }
 
         void UpdateTransform()
@@ -98,12 +98,12 @@ namespace Ika.Controls
             UpdateStates(true);
             UpdateTransform();
 
-            if (Math.Abs(ScrollViewer.VerticalOffset) > 0.0)
+            if (ScrollViewer.VerticalOffset != 0.0)
                 _isPullRefresh = true;
 
             if (e.IsIntermediate)
                 return;
-            if (Math.Abs(ScrollViewer.VerticalOffset) < 0.0 && _isPullRefresh)
+            if (ScrollViewer.VerticalOffset == 0.0 && _isPullRefresh)
             {
                 OnPullToRefresh(new EventArgs());
             }
