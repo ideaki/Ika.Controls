@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
+using Windows.Data.Xml.Dom;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Notifications;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -43,6 +46,38 @@ namespace Ika.Controls.Test
             // Windows.Phone.UI.Input.HardwareButtons.BackPressed イベント。
             // 一部のテンプレートで指定された NavigationHelper を使用している場合は、
             // このイベントが自動的に処理されます。
+        }
+
+        private void PullToRefreshPanel_PullToRefresh(object sender, EventArgs e)
+        {
+            UpdateListViewItemSource();
+            SendToastMessageToUser("Ika.Controls", "ItemsSourceは更新しました。");
+        }
+
+        private void UpdateListViewItemSource()
+        {
+            TestListView.ItemsSource = Enumerable.Range(31, 60);
+        }
+
+        private void SendToastMessageToUser(string header, string body)
+        {
+            const ToastTemplateType toastTemplate = ToastTemplateType.ToastText02;
+            var toastXml = ToastNotificationManager.GetTemplateContent(toastTemplate);
+
+            var toastTextElements = toastXml.GetElementsByTagName("text");
+            toastTextElements[0].AppendChild(toastXml.CreateTextNode(header));
+            toastTextElements[1].AppendChild(toastXml.CreateTextNode(body));
+
+            var toastNode = toastXml.SelectSingleNode("/toast");
+            var xmlElement = (XmlElement)toastNode;
+            if (xmlElement != null) xmlElement.SetAttribute("duration", "long");
+
+            var toast = new ToastNotification(toastXml)
+            {
+                ExpirationTime = DateTimeOffset.UtcNow.AddSeconds(3600)
+            };
+
+            ToastNotificationManager.CreateToastNotifier().Show(toast);
         }
     }
 }

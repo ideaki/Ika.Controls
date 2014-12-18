@@ -38,7 +38,7 @@
                 Minimum="-50"
                 Value="{Binding VerticalSpeed,
                                 Mode=TwoWay}" />
-        <ika:PullToRefreshPanel Grid.Row="1" PullToRefresh="PullToRefreshPanel_PullToRefresh">
+        <ika:PullToRefreshPanel Grid.Column="0" Grid.Row="1" PullToRefresh="PullToRefreshPanel_PullToRefresh">
             <local:MyListView ScrollViewer.VerticalScrollBarVisibility="Auto">
                 <Interactivity:Interaction.Behaviors>
                     <Behaviors:AutoScrollBehavior />

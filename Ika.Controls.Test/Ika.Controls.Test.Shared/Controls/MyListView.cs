@@ -40,6 +40,11 @@ namespace Ika.Controls.Test
             var r = Math.Min(255, Math.Max(0, 255 - index));
             var g = Math.Min(255, Math.Max(0, 510 - index));
             var b = Math.Min(255, index);
+
+#if WINDOWS_PHONE_APP
+            element.SetValue(MarginProperty, new Thickness(5));
+#endif
+
             element.SetValue(BackgroundProperty, new SolidColorBrush(Color.FromArgb((byte)255, (byte)r, (byte)g, (byte)b)));
             //element.SetValue(HeightProperty, index + 10);
             base.PrepareContainerForItemOverride(element, item);
