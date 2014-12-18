@@ -54,9 +54,29 @@ namespace Ika.Controls
             DependencyProperty.Register("PullRange",
                                         typeof(double),
                                         typeof(PullToRefreshPanel),
+                                        new PropertyMetadata(40.0, PullRangeChangeEvent));
+
+        private static void PullRangeChangeEvent(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var range = (double)e.NewValue;
+            d.SetValue(InvisiblePullRangeProperty, range * 5);
+        }
+
+
+
+        public double InvisiblePullRange
+        {
+            get { return (double)GetValue(InvisiblePullRangeProperty); }
+            protected set { SetValue(InvisiblePullRangeProperty, value); }
+        }
+
+        public static readonly DependencyProperty InvisiblePullRangeProperty =
+            DependencyProperty.Register("InvisiblePullRange",
+                                        typeof(double),
+                                        typeof(PullToRefreshPanel),
                                         new PropertyMetadata(200.0));
 
-        void UpdateLView()
+        void UpdateView()
         {
             var grid = (Grid)GetTemplateChild("PullGrid");
             ScrollViewer.ChangeView(null, grid.ActualHeight, null);
@@ -75,7 +95,7 @@ namespace Ika.Controls
         {
             var element = (UIElement)GetTemplateChild("StackPanel");
             var transform = element.RenderTransform as CompositeTransform ?? new CompositeTransform();
-            transform.TranslateY = (ScrollViewer.VerticalOffset - PullRange) * 0.8;
+            transform.TranslateY = (ScrollViewer.VerticalOffset - InvisiblePullRange) * 0.8;
             element.RenderTransform = transform;
         }
 
@@ -87,9 +107,9 @@ namespace Ika.Controls
         protected override void OnApplyTemplate()
         {
             ScrollViewer = (ScrollViewer)GetTemplateChild("ScrollViewer");
-            ScrollViewer.SizeChanged += (s, e) => UpdateLView();
+            ScrollViewer.SizeChanged += (s, e) => UpdateView();
             ScrollViewer.ViewChanged += ScrollViewer_ViewChanged;
-            Loaded += (s, e) => UpdateLView();
+            Loaded += (s, e) => UpdateView();
             base.OnApplyTemplate();
         }
 

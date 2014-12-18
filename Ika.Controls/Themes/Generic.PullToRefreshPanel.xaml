@@ -1,13 +1,13 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:controls="using:Ika.Controls">
+                    xmlns:local="using:Ika.Controls">
 
 
-    <Style TargetType="controls:PullToRefreshPanel">
+    <Style TargetType="local:PullToRefreshPanel">
         <Setter Property="FontSize" Value="24" />
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="controls:PullToRefreshPanel">
+                <ControlTemplate TargetType="local:PullToRefreshPanel">
                     <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}">
 
                         <VisualStateManager.VisualStateGroups>
@@ -33,15 +33,17 @@
                                       VerticalScrollBarVisibility="Hidden"
                                       ZoomMode="Disabled">
                             <StackPanel x:Name="StackPanel">
-                                <Grid Name="PullGrid" Height="{TemplateBinding PullRange}">
-                                    <ContentControl x:Name="RefreshContent"
-                                                    HorizontalAlignment="Center"
-                                                    VerticalAlignment="Bottom"
-                                                    Content="{TemplateBinding RefreshContent}" />
-                                    <ContentControl x:Name="PullContent"
-                                                    HorizontalAlignment="Center"
-                                                    VerticalAlignment="Bottom"
-                                                    Content="{TemplateBinding PullContent}" />
+                                <Grid Name="PullGrid" Height="{TemplateBinding InvisiblePullRange}">
+                                    <Grid Height="{TemplateBinding PullRange}" VerticalAlignment="Bottom">
+                                        <ContentControl x:Name="RefreshContent"
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center"
+                                                        Content="{TemplateBinding RefreshContent}" />
+                                        <ContentControl x:Name="PullContent"
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center"
+                                                        Content="{TemplateBinding PullContent}" />
+                                    </Grid>
                                 </Grid>
                                 <Grid x:Name="ContentGrid">
                                     <ContentPresenter />
